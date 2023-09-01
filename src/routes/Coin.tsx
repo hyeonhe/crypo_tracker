@@ -32,7 +32,7 @@ const Container = styled.div`
 const Header = styled.header`
   height: 15vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 
@@ -78,6 +78,13 @@ const Tab = styled.span<{ isActive: boolean }>`
   a {
     display: block;
   }
+`;
+const Home = styled.div`
+  /* height: 50px; */
+  margin-top: 50px;
+  font-size: 32px;
+  /* display: flex; */
+  /* align-items: center; */
 `;
 
 interface RouteParams {
@@ -161,6 +168,9 @@ function Coin() {
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <Home>
+        <Link to="/">&larr; Home</Link>
+      </Home>
       <Header>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
@@ -208,7 +218,7 @@ function Coin() {
               <Price />
             </Route>
             <Route path={`/:coinId/chart`}>
-              <Chart />
+              <Chart coinId={coinId} />
             </Route>
           </Switch>
         </>
