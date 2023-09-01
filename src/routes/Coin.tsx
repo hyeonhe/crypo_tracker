@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Link,
   Route,
@@ -7,6 +6,7 @@ import {
   useParams,
   useRouteMatch,
 } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
@@ -80,11 +80,8 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 const Home = styled.div`
-  /* height: 50px; */
   margin-top: 50px;
   font-size: 32px;
-  /* display: flex; */
-  /* align-items: center; */
 `;
 
 interface RouteParams {
@@ -162,12 +159,18 @@ function Coin() {
   );
   const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
     ["tickers", coinId],
-    () => fetchCoinTickers(coinId)
+    () => fetchCoinTickers(coinId),
+    { refetchInterval: 5000 }
   );
 
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet>
       <Home>
         <Link to="/">&larr; Home</Link>
       </Home>
@@ -190,8 +193,8 @@ function Coin() {
               <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{infoData?.open_source ? "Yes" : "No"}</span>
+              <span>Price:</span>
+              <span>{tickersData?.quotes.USD.price.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>

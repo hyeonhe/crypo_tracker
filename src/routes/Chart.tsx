@@ -19,11 +19,12 @@ interface IHistorical {
 
 // interface
 function Chart({ coinId }: ChartProps) {
-  const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () =>
-    fetchCoinHistory(coinId)
+  const { isLoading, data } = useQuery<IHistorical[]>(
+    ["ohlcv", coinId],
+    () => fetchCoinHistory(coinId),
+    { refetchInterval: 5000 }
   );
   return (
-    // data: data?.map((price) => parseFloat(price.close)) ?? []
     <div>
       {isLoading ? (
         "Loading chart..."
